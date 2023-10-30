@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    /* CSS for the collapsible leaderboard */
+    .collapsible {
+        display: none;
+    }
+</style>
+<h1>You completed this session!</h1>
+<body>
+<h3>Leaderboard</h3>
+    <button id="toggleLeaderboard">Toggle Leaderboard</button>
+    <table class="collapsible" id="leaderboardTable">
+        <thead>
+            <tr>
+                <th>Team Name</th>
+                <th>Score (Percentage)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in leaderboard %}
+            <tr>
+                <td>{{ entry.0 }}</td>
+                <td><progress value="{{ entry.1 }}" max="100"></progress></td>
+<!--                <td>{{ entry.1|floatformat:2  }}</td>-->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+<script>
+    const toggleButton = document.getElementById('toggleLeaderboard');
+    const leaderboardTable = document.getElementById('leaderboardTable');
+    let visible = false;
+
+    toggleButton.addEventListener('click', () => {
+        if (visible) {
+            leaderboardTable.style.display = 'none';
+            // Send an AJAX request to inform the backend about the toggle event
+            fetch('/toggle_leaderboard/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}', // Include CSRF token
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ visible: false }), // Send data about visibility
+            });
+        } else {
+            leaderboardTable.style.display = 'table';
+            // Send an AJAX request to inform the backend about the toggle event
+            fetch('/toggle_leaderboard/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}', // Include CSRF token
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ visible: true }), // Send data about visibility
+            });
+        }
+        visible = !visible;
+    });
+</script>
+
+<p>You answered {{ correct }} questions correctly!</p>
+<p>You only made {{ wrong }} mistakes</p>
+<p><a href="{% url 'index' %}">Continue</a></p>
+</body>
+</html>

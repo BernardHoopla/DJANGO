@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+{% block content %}
+<h1>ModelMasters</h1>
+  <p>Welcome to <em>ModelMaster</em>, a very basic SlimStampen with competition.</p>
+<h2>Dynamic content</h2>
+  <p>Current information:</p>
+  <ul>
+    <li><strong>Participant:</strong> {{ participant_nr }}</li>
+    <li><strong>Number of facts:</strong> {{ num_questions }}</li>
+    <li><strong>First fact question:</strong> {{ first_question }}</li>
+    <li><strong>First fact answer:</strong> {{ first_answer }}</li>
+  </ul>
+<h1>To start the session (and login):
+  <p><a href="{% url 'login' %}">Session</a></p>
+</h1>
+{% endblock %}
